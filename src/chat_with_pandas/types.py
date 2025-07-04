@@ -48,11 +48,12 @@ if unclear, use last."""
     )
 
 
-class Resample(BaseModel):
-    function: Literal["resample"]
-    freq: Literal["D", "W-MON", "M", "Q", "Y"] = Field(
-        description="""resamples a pandas dataframe via df.resample(freq).last()"""
-    )
+# TODO: RunDuckDBSQL handles this well, and doesn't require a date index on the pandas data frame
+# class Resample(BaseModel):
+#     function: Literal["resample"]
+#     freq: Literal["D", "W-MON", "M", "Q", "Y"] = Field(
+#         description="""resamples a pandas dataframe via df.resample(freq).last()"""
+#     )
 
 
 class RunDuckDBSQL(BaseModel):
@@ -61,6 +62,4 @@ class RunDuckDBSQL(BaseModel):
         description="""uses duckdb to run a sql query on a dataframe"""
     )
 
-
-# if unclear, use `last` as default
 AgentPlan = Union[FilterRows, SortRows, TopRows, SelectColumns, GroupBy, RunDuckDBSQL]
