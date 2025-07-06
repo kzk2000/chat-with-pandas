@@ -54,10 +54,9 @@ def resample(df: pd.DataFrame, freq: str) -> pd.DataFrame:
 
 @register_tool
 def run_duckdb_sql(df: pd.DataFrame, sql: str) -> pd.DataFrame:
-    """Executes a SQL query against the in-memory dataframe using DuckDB syntax.
-    Instructions:
-    * Always use `ILIKE` for case-insensitive filtering of string columns
-    * Always use `DATE_TRUNC` for resampling
+    """
+    Run a SQL query on the in-memory DataFrame using DuckDB syntax.
+    You must use `df` as the table name.
     """
     with duckdb.connect() as conn:
         conn.register('df', df)
