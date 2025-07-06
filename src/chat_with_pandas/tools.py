@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import duckdb
 import pandas as pd
 from pydantic_ai import Agent
@@ -53,6 +54,11 @@ def resample(df: pd.DataFrame, freq: str) -> pd.DataFrame:
 
 @register_tool
 def run_duckdb_sql(df: pd.DataFrame, sql: str) -> pd.DataFrame:
+    """Executes a SQL query against the in-memory dataframe using DuckDB syntax.
+    Instructions:
+    * Always use `ILIKE` for case-insensitive filtering of string columns
+    * Always use `DATE_TRUNC` for resampling
+    """
     with duckdb.connect() as conn:
         conn.register('df', df)
         result_df = conn.execute(sql).fetchdf()
@@ -95,9 +101,8 @@ INSTRUCTIONS:
 4. Summarize results meaningfully
 5. Remember previous operations in the conversation
 
-Use the available tools to analyze and transform the data.
-If you can, always choose SQL and create DuckDB sql syntax.
-    """
+You have access to various tools: If you can, always prefer to use of the `run_duckdb_sql` tool.
+"""
     return system_prompt
 
 

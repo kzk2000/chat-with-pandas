@@ -59,7 +59,31 @@ if unclear, use last."""
 class RunDuckDBSQL(BaseModel):
     function: Literal["run_duckdb_sql"]
     sql: str = Field(
-        description="""uses duckdb to run a sql query on a dataframe"""
-    )
+        description="""
+Executes a SQL query against the in-memory dataframe using DuckDB syntax.
+
+Formatting Instructions:
+- Put each WHERE clause on a new line
+- Use `ILIKE '%...%'` for string filters
+- Prefer CTEs for multi-step logic
+- Use 2-space indents for readability
+
+Example:
+
+WITH filtered AS (
+  SELECT *
+  FROM df
+  WHERE 
+    country ILIKE '%US%'
+    AND category ILIKE '%Retail%'
+)
+SELECT 
+  date_trunc('month', ts)   AS month,
+  AVG(revenue)              AS avg_revenue
+FROM filtered
+GROUP BY month
+ORDER BY month
+""")
+
 
 AgentPlan = Union[FilterRows, SortRows, TopRows, SelectColumns, GroupBy, RunDuckDBSQL]
